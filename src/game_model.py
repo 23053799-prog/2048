@@ -240,3 +240,19 @@ class GameModel:
             "game_over": self.game_over,
             "won": self.won,
         }
+
+
+    def _load_high_score(self) -> None:
+        """Load high score from JSON file if it exists."""
+        if os.path.exists(self.high_score_file):
+            try:
+                with open(self.high_score_file, "r") as f:
+                    data = json.load(f)
+                    self.high_score = data.get("high_score", 0)
+            except (json.JSONDecodeError, IOError):
+                self.high_score = 0
+
+    def _save_high_score(self) -> None:
+        """Save high score to JSON file."""
+        with open(self.high_score_file, "w") as f:
+            json.dump({"high_score": int(self.high_score)}, f)
