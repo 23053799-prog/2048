@@ -30,3 +30,18 @@ class GameModel:
 
         self._load_high_score()
         self._spawn_initial_tiles()
+
+
+    def _spawn_initial_tiles(self) -> None:
+        """Spawn two random tiles (90% chance 2, 10% chance 4) at game start."""
+        self._spawn_tile()
+        self._spawn_tile()
+
+    def _spawn_tile(self) -> None:
+        """Spawn a single random tile (90% chance 2, 10% chance 4)."""
+        empty_cells = np.argwhere(self.grid == 0)
+        if len(empty_cells) > 0:
+            row, col = empty_cells[np.random.randint(len(empty_cells))]
+            value = 4 if np.random.random() < 0.1 else 2
+            self.grid[row, col] = value
+
