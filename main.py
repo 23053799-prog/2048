@@ -1,6 +1,3 @@
-import sys
-import tkinter as tk
-
 from src.game_model import GameModel
 from src.game_view import GameView
 from src.game_controller import GameController
