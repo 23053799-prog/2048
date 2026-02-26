@@ -172,3 +172,39 @@ class GameModel:
             new_column, score = self._move_line_left(reversed_column)
             self.grid[:, j] = new_column[::-1]
             self.score += score
+
+
+    def _check_game_state(self) -> None:
+        """Check for win or game over conditions."""
+        # Check for win (2048 tile exists)
+        if np.max(self.grid) >= 2048 and not self.won:
+            self.won = True
+            if self.score > self.high_score:
+                self.high_score = self.score
+                self._save_high_score()
+
+        # Check for possible moves
+        if not self._has_valid_moves():
+            self.game_over = True
+            if self.score > self.high_score:
+                self.high_score = self.score
+                self._save_high_score()
+
+    def _has_valid_moves(self) -> bool:
+        """Check if any valid moves remain."""
+        # Check for empty cells
+        if np.any(self.grid == 0):
+            return True
+
+        # Check for possible merges
+        for i in range(self.size):
+            for j in range(self.size):
+                current = self.grid[i, j]
+                # Check right neighbor
+                if j < self.size - 1 and current == self.grid[i, j + 1]:
+                    return True
+                # Check down neighbor
+                if i < self.size - 1 and current == self.grid[i + 1, j]:
+                    return True
+
+        return False
