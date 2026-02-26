@@ -208,3 +208,35 @@ class GameModel:
                     return True
 
         return False
+
+    def undo(self) -> bool:
+        """Undo the last move."""
+        if len(self.move_history) > 0:
+            state = self.move_history.pop()
+            self.grid = state["grid"]
+            self.score = state["score"]
+            return True
+        return False
+
+    def reset(self) -> None:
+        """Reset the game to initial state."""
+        self.grid = np.zeros((self.size, self.size), dtype=int)
+        self.score = 0
+        self.game_over = False
+        self.won = False
+        self.move_history = []
+        self._spawn_initial_tiles()
+
+    def get_grid(self) -> np.ndarray:
+        """Return a copy of the current grid."""
+        return self.grid.copy()
+
+    def get_state(self) -> dict:
+        """Return the complete game state."""
+        return {
+            "grid": self.get_grid(),
+            "score": self.score,
+            "high_score": self.high_score,
+            "game_over": self.game_over,
+            "won": self.won,
+        }
